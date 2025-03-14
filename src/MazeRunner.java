@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class MazeRunner {
@@ -8,7 +9,10 @@ public class MazeRunner {
     public static void main(String[] args) {
         String[][] maze = getMaze("src/txt");
         Maze m = new Maze(maze);
-        m.solve();
+        m.findPath();
+        m.getAnswer();
+        System.out.println();
+       // System.out.println(Arrays.deepToString(m.getMaze()));
     }
 
 
