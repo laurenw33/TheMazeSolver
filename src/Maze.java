@@ -2,111 +2,64 @@ public class Maze {
     private String[][] maze;
     private final String CHECKED = "C";
     private final String PATH = "P";
-    private int r;
-    private int c;
 
-    public Maze (String[][] m) {
+    public Maze(String[][] m) {
         maze = m;
-        r = 0;
-        c = 0;
     }
 
-    public boolean findPath() {
-        boolean done = false;
-        if (validPosition(r, c)) {
-            checkPosition(r, c);
-            if (solved()) {
-                done = true;
-            } else {
-                if (!done) {
-                    if (goRight()) {
-                        c += 1;
-                        done = true;
-                        System.out.print("(" + r + ", " + c + ") ---->");
-                    }
-                    done = findPath();
-                }
-                if (!done) {
-                    if (goDown()) {
-                        r += 1;
-                        done = true;
-                        System.out.print("(" + r + ", " + c + ") ---->");
-                    }
-                }
-                if (!done) {
-                    if (goUp()) {
-                        r -= 1;
-                        done = true;
-                        System.out.print("(" + r + ", " + c + ") ---->");
-                    }
-                }
-                if (!done) {
-                    if (goLeft()) {
-                        c -= 1;
-                        done = true;
-                        System.out.print("(" + r + ", " + c + ") ---->");
-                    }
-                }
-            }
+    public boolean findPath(int row, int col) {
+        if (!validPosition(row, col)) {
+            return false;
         }
-        return done;
-    }
 
-    public void getAnswer() {
-        for (int r = 0; r < maze.length - 1; r++) {
-            for (int c = 0; c < maze[0].length - 1; c++) {
-                findPath();
-            }
+        System.out.print("(" + row + ", " + col + ") --> ");
+
+        if (row == maze.length - 1 && col == maze[0].length - 1) {
+            maze[row][col] = PATH;
+            System.out.println("(" + row + ", " + col + ") [GOAL]");
+            return true;
         }
-        for (int r = 0; r < maze.length - 1; r++) {
-            for (int c = 0; c < maze[0].length - 1; c++) {
-                if (maze[r][c].equals(CHECKED)) {
-                    System.out.print("(" + r + ", " + c + ") ---->");
-                }
-            }
-        }
-    }
 
-
-    public boolean solved() {
-        return r == maze.length - 1 && c == maze[0].length - 1;
-    }
-
-    public void checkPosition(int row, int col) {
         maze[row][col] = CHECKED;
-    }
 
-    public void placePath(int row, int col) {
-        maze[row][col] = PATH;
-    }
+        if (findPath(row, col + 1) ||
+                findPath(row + 1, col) ||
+                findPath(row - 1, col) ||
+                findPath(row, col - 1)) {
 
-    public boolean validPosition(int row, int col) {
-        if (row >= 0 && row < maze.length - 1 && col >= 0 && col < maze[0].length - 1) {
-            if (maze[row][col].equals(".")) {
-                return true;
-            }
+            maze[row][col] = PATH;
+            return true;
         }
+
         return false;
     }
 
-    public boolean goRight() {
-        return maze[r][c + 1].equals(".");
+    public void solve() {
+        System.out.println("Path taken:");
+        if (findPath(0, 0)) {
+            System.out.println("Solution found!");
+            printMaze();
+        } else {
+            System.out.println("No path found.");
+        }
     }
 
-    public boolean goLeft() {
-        return maze[r][c - 1].equals(".");
+    public boolean validPosition(int row, int col) {
+        return row >= 0 && row < maze.length &&
+                col >= 0 && col < maze[0].length &&
+                maze[row][col].equals(".");
     }
 
-    public boolean goDown() {
-        return maze[r + 1][c].equals(".");
-    }
-
-    public boolean goUp() {
-       return maze[r - 1][c].equals(".");
+    public void printMaze() {
+        for (String[] row : maze) {
+            for (String cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
     }
 
     public String[][] getMaze() {
         return maze;
     }
-
 }
