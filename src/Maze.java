@@ -25,7 +25,7 @@ public class Maze {
             }
             else if (validPosition(row + 1, col)) { // down
                 row++;
-                maze[row][col] = CHECKED;
+                maze[row][col] = CHECKED; // marks checked so we know the path that we took
             }
             else if (validPosition(row, col + 1)) { // right
                 col++;
@@ -41,7 +41,7 @@ public class Maze {
             else { // if cant be checked put a # to remove dead end
                 maze[row][col] = "#";
 
-                if (isChecked(row + 1, col)) {
+                if (isChecked(row + 1, col)) { // if already checked it will move on to a different spot
                     row++;
                 }
                 else if (isChecked(row, col + 1)) {
@@ -53,12 +53,12 @@ public class Maze {
                 else if (isChecked(row, col - 1)) {
                     col--;
                 }
-                else {
+                else { // ends loop
                     complete = true;
                 }
             }
             if (maze[row][col].equals(CHECKED)) {
-                System.out.print("(" + row + ", " + col + ") --> ");
+                System.out.print("(" + row + ", " + col + ") --> "); // prints out each of the coordinates after each movement (each loop is one movement)
             }
         }
     }
