@@ -1,53 +1,77 @@
+import java.util.Arrays;
+
 public class Maze {
     private String[][] maze;
     private final String CHECKED = "C";
     private final String PATH = "P";
+    int row;
+    int col;
 
     public Maze(String[][] m) {
         maze = m;
+        row = 0;
+        col = 0;
     }
 
-    public boolean findPath(int row, int col) {
-        if (!validPosition(row, col)) {
-            return false;
-        }
-
-        System.out.print("(" + row + ", " + col + ") --> ");
-
-        if (row == maze.length - 1 && col == maze[0].length - 1) {
-            maze[row][col] = PATH;
-            System.out.println("(" + row + ", " + col + ") [GOAL]");
-            return true;
-        }
-
+    public void findPath() {
         maze[row][col] = CHECKED;
 
-        if (findPath(row, col + 1) ||
-                findPath(row + 1, col) ||
-                findPath(row - 1, col) ||
-                findPath(row, col - 1)) {
+        boolean complete = false;
 
-            maze[row][col] = PATH;
-            return true;
+        while (!complete) {
+            if (row == maze.length - 1 && col == maze[0].length - 1) { // if it hits the last row and col, it'll stop
+                complete = true;
+            }
+            else if (validPosition(row + 1, col)) { // down
+                row++;
+                maze[row][col] = CHECKED;
+            }
+            else if (validPosition(row, col + 1)) { // right
+                col++;
+                maze[row][col] = CHECKED;
+            }
+            else if (validPosition(row - 1, col)) { // up
+                row--;
+                maze[row][col] = CHECKED;
+            } else if (validPosition(row, col - 1)) { // left
+                col--;
+                maze[row][col] = CHECKED;
+            }
+            else { // if cant be checked put a # to remove dead end
+                maze[row][col] = "#";
+
+                if (isChecked(row + 1, col)) {
+                    row++;
+                }
+                else if (isChecked(row, col + 1)) {
+                    col++;
+                }
+                else if (isChecked(row - 1, col)) {
+                    row--;
+                }
+                else if (isChecked(row, col - 1)) {
+                    col--;
+                }
+                else {
+                    complete = true;
+                }
+            }
+            if (maze[row][col].equals(CHECKED)) {
+                System.out.print("(" + row + ", " + col + ") --> ");
+            }
         }
+    }
 
-        return false;
+    public boolean isChecked(int row, int col) {
+        return maze[row][col].equals(CHECKED);
     }
 
     public void solve() {
-        System.out.println("Path taken:");
-        if (findPath(0, 0)) {
-            System.out.println("Solution found!");
-            printMaze();
-        } else {
-            System.out.println("No path found.");
-        }
+        findPath();
     }
 
     public boolean validPosition(int row, int col) {
-        return row >= 0 && row < maze.length &&
-                col >= 0 && col < maze[0].length &&
-                maze[row][col].equals(".");
+        return row >= 0 && row < maze.length && col >= 0 && col < maze[0].length && maze[row][col].equals(".");
     }
 
     public void printMaze() {
