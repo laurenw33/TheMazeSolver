@@ -17,6 +17,7 @@ public class Maze {
         maze[row][col] = CHECKED;
 
         boolean complete = false;
+        System.out.print("(" + row + ", " + col + ") --> ");
 
         while (!complete) {
             if (row == maze.length - 1 && col == maze[0].length - 1) { // if it hits the last row and col, it'll stop
