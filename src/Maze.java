@@ -3,7 +3,6 @@ import java.util.Arrays;
 public class Maze {
     private String[][] maze;
     private final String CHECKED = "C";
-    private final String PATH = "P";
     int row;
     int col;
 
@@ -14,10 +13,10 @@ public class Maze {
     }
 
     public void findPath() {
-        maze[row][col] = CHECKED;
+        maze[row][col] = CHECKED; // this will be our identifier for our path
 
         boolean complete = false;
-        System.out.print("(" + row + ", " + col + ") --> ");
+        System.out.print("(" + row + ", " + col + ") --> "); // the first coordinate won't be printed
 
         while (!complete) {
             if (row == maze.length - 1 && col == maze[0].length - 1) { // if it hits the last row and col, it'll stop
@@ -42,16 +41,16 @@ public class Maze {
                 maze[row][col] = "#";
 
                 if (isChecked(row + 1, col)) { // if already checked it will move on to a different spot
-                    row++;
+                    row++; // down
                 }
                 else if (isChecked(row, col + 1)) {
-                    col++;
+                    col++; // right
                 }
                 else if (isChecked(row - 1, col)) {
-                    row--;
+                    row--; // up
                 }
                 else if (isChecked(row, col - 1)) {
-                    col--;
+                    col--; // left
                 }
                 else { // ends loop
                     complete = true;
